@@ -18,7 +18,7 @@ RUN make
 WORKDIR /app/llama.cpp/models
 
 # Download proper model
-RUN wget https://huggingface.co/TheBloke/Llama-2-7B-GGML/blob/main/llama-2-7b.ggmlv3.q4_0.bin
+RUN wget https://huggingface.co/TheBloke/Llama-2-7B-GGML/resolve/main/llama-2-7b.ggmlv3.q4_K_S.bin
 
 WORKDIR /app/llama.cpp
 
