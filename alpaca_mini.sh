@@ -16,4 +16,4 @@ cd ..
        --top_k 10000 \
        --temp 0.2 \
        --repeat_penalty 1.1 \
-       -t 25
+       -t 2
