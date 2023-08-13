@@ -1,0 +1,26 @@
+name: Prompt Llama
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  run_command:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krisciu/FreeLlamas:latest
+      env:
+        NUM_TOKENS: 512
+        TEMP: 0.8
+        REPEAT_PENALTY: 1.1
+        PROMPT: "Default Prompt: Tell me a funny joke :)"
+    steps:
+    - name: Log Environment Variables
+      run: |
+        echo "Number of tokens: $NUM_TOKENS"
+        echo "Temperature: $TEMP"
+        echo "Repeat penalty factor: $REPEAT_PENALTY"
+        echo " PROMPT:\n $PROMPT"
+    - name: run Llama-2
+      run: ./app/llama.cpp/examples/llama_2_mini.sh ${{ env.NUM_TOKENS }} ${{ env.TEMP }} ${{ env.REPEAT_PENALTY }} ${{ env.PROMPT }}
+
