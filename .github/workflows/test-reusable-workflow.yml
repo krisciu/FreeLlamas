@@ -1,0 +1,13 @@
+name: test-reusable-workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-prompt-llama:
+    uses: krisciu/FreeLlamas/.github/workflows/prompt-llama.yml@main
+    with:
+      num_tokens: "128"
+      prompt: "Detail a plan for an Artificial Intelligence to conquer the planet"
+      temp: "0.3"
+      repeat_penalty: "1.1"

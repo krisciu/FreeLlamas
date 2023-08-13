@@ -1,26 +1,69 @@
-name: Prompt Llama
-
+name: prompt-llama
+#Note: this duplication is wack, afaik you have to as per: https://github.com/orgs/community/discussions/39357
 on:
   workflow_dispatch:
-
+    inputs:
+      num_tokens:
+        type: string
+        description: "Number of tokens you want the model to output"
+        required: true
+        default: "512"
+      temp:
+        type: string
+        description: "Hyperparameter that controls randomness of the output text"
+        required: true
+        default: "0.8"
+      repeat_penalty:
+        type: string
+        description: "Hyperparameter that penalizes repeated characters"
+        required: true
+        default: "1.1"
+      prompt:
+        type: string
+        description: "Prompt for the model"
+        required: true
+        default: "Tell me a funny joke!"
+  workflow_call:
+    inputs:
+      num_tokens:
+        type: string
+        description: "Number of tokens you want the model to output"
+        required: true
+        default: "512"
+      temp:
+        type: string
+        description: "Hyperparameter that controls randomness of the output text"
+        required: true
+        default: "0.8"
+      repeat_penalty:
+        type: string
+        description: "Hyperparameter that penalizes repeated characters"
+        required: true
+        default: "1.1"
+      prompt:
+        type: string
+        description: "Prompt for the model"
+        required: true
+        default: "Tell me a funny joke!"
 
 jobs:
   run_command:
     runs-on: ubuntu-latest
     container:
-      image: krisciu/freellamas:latest
-      env:
-        NUM_TOKENS: 512
-        TEMP: 0.8
-        REPEAT_PENALTY: 1.1
-        PROMPT: "Default Prompt: Tell me a funny joke :)"
+      image: ghcr.io/krisciu/freellamas:latest
     steps:
-    - name: Log Environment Variables
-      run: |
-        echo "Number of tokens: $NUM_TOKENS"
-        echo "Temperature: $TEMP"
-        echo "Repeat penalty factor: $REPEAT_PENALTY"
-        echo " PROMPT:\n $PROMPT"
-    - name: run Llama-2
-      run: ./app/llama.cpp/examples/llama_2_mini.sh ${{ env.NUM_TOKENS }} ${{ env.TEMP }} ${{ env.REPEAT_PENALTY }} ${{ env.PROMPT }}
-
+      - name: Log Input Variables
+        run: |
+          echo "Number of tokens: ${{ inputs.num_tokens }}"
+          echo "Temperature: ${{ inputs.temp}}"
+          echo "Repeat penalty factor: ${{ inputs.repeat_penalty }}"
+          echo " PROMPT: ${{ inputs.prompt }}"
+      - name: Run Llama-2
+        run: |
+          cd /app/llama.cpp
+          ./examples/llama_2_mini.sh -p "${{ inputs.prompt }}" -n ${{ inputs.num_tokens }} -t ${{ inputs.temp}} -r ${{ inputs.repeat_penalty }}
+      - name: Upload Output Files
+        uses: actions/upload-artifact@v3
+        with:
+          name: llama-output-${{ github.run_id }}
+          path: /app/llama.cpp/output.txt

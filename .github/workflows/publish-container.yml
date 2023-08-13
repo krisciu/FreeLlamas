@@ -1,8 +1,11 @@
-name: Build and Run Docker Container
+name: publish-container
 on:
   push:
     branches:
     - main
+    paths: 
+      - 'Dockerfile'
+      - 'llama_2_mini.sh'
   workflow_dispatch:  
 
 jobs:

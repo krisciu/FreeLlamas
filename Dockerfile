@@ -12,6 +12,9 @@ RUN git clone https://github.com/ggerganov/llama.cpp
 # Change WORKDIR to the cloned repository directory
 WORKDIR /app/llama.cpp
 
+# revert to older commit to support ggmlv3 files
+RUN git reset --hard dadbed99e65252d79f81101a392d0d6497b86caa
+
 # Build the project 
 RUN make
 
@@ -25,4 +28,4 @@ WORKDIR /app/llama.cpp
 COPY llama_2_mini.sh /app/llama.cpp/examples/llama_2_mini.sh
 
 # Specify the command to run when the container starts
-CMD ["./examples/llama_2_mini.sh"]
+ENTRYPOINT ["./examples/llama_2_mini.sh"]
