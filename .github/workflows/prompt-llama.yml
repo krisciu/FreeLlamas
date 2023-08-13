@@ -8,7 +8,7 @@ jobs:
   run_command:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krisciu/freellamas:latest
+      image: krisciu/freellamas:latest
       env:
         NUM_TOKENS: 512
         TEMP: 0.8
